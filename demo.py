@@ -21,28 +21,47 @@ def main():
     # saveData(savepath)
     # askURL(baseUrl + params)
 
+
+# 创建正则表达式对象，表示规则（字符串的模式）
+findLink = re.compile(r'<a class="fed-list-title fed-font-xiv fed-text-center fed-text-sm-left fed-visible fed-part-eone" href="(.*?)">')
+
+
 # 爬取网页
 def getData(baseUrl):
     dataList = []
     for i in range(1, 667):
         url = baseUrl + f"/vod/show/id/1/page/{i}.html"
-        html = askURL(url)      # 保存获取到的网页源码
+        html = askURL(url)      # 保存获取到的网页源码class="fed-list-item fed-padding fed-col-xs4 fed-col-sm3 fed-col-md2
 
-    # 2.逐一解析数据
+        # 2.逐一解析数据
+        soup = BeautifulSoup(html, "html.parser")
+        for item in soup.find_all("li", class_="fed-list-item fed-padding fed-col-xs4 fed-col-sm3 fed-col-md2"):  #查找符合要求的字符串，形成列表.
+            # print(item)    #查看电影item全部信息
+            data = []      #保存一部电影的全部信息
+            item = str(item)
+
+            # 影片详情的链接
+            link = re.findall(findLink, item)[0]  #re库用来通过正则表达式查找指定的字符串
+            print(baseUrl + link)
+
+
+
+
     return dataList
 
 
 # 得到指定一个URL的网页内容
 def askURL(url):
     head = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0",
+
     }
     request = urllib.request.Request(url, headers=head)
     html = ""
     try:
         response = urllib.request.urlopen(request)
         html = response.read().decode("utf-8")
-        print(html)
+        # print(html)
     except urllib.error.URLError as e:
         if hasattr(e, "code"):
             print(e.code)
