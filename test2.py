@@ -35,8 +35,7 @@ find_category = re.compile(r'<a href="/vod/type/id/\d*.html" target="_blank">(.*
 find_area = re.compile('<li class="fed-col-xs6 fed-col-md3 fed-part-eone"><span class="fed-text-muted">'
                        '地区：</span>(.*?)</li>')
 # 年份
-find_year = re.compile(r'<li class="fed-col-xs6 fed-col-md3 fed-part-eone">'
-                       r'<span class="fed-text-muted">年份：</span>(.*?)</li>')
+find_year = re.compile(r'<li class="fed-col-xs6 fed-col-md3 fed-part-eone"><span class="fed-text-muted">年份：</span>未知</li>')
 # 更新日期
 find_update = re.compile('<li class="fed-col-xs6 fed-col-md3 fed-part-eone"><span class="fed-text-muted">'
                          '更新：</span>(.*?)</li>')
@@ -64,50 +63,44 @@ def get_data(base_url):
             title = ''
             for item in soup.find_all("li", class_="fed-list-item fed-padding fed-col-xs4 fed-col-sm3 fed-col-md2"):
                 item = str(item)
-                try:
-                    # 影片详情的链接
-                    link = find_link.findall(item)[0]
-                    detail_url = base_url + link
-                    # 从详情页获取数据
-                    detail_html = ask_url(detail_url)
-                    doc = etree.HTML(detail_html)
-                    # detailSoup = BeautifulSoup(detailHtml,"html.parser")
-                    str_detail_html = str(detail_html)
-                    title = find_title.findall(str_detail_html)[0]
-                    movie_id = find_id.findall(str_detail_html)[0]
-                    category = find_category.findall(str_detail_html)[0]
-                    area = remove_tags(find_area.findall(str_detail_html)[0]).replace('&nbsp;', ',')
-                    year = remove_tags(find_year.findall(str_detail_html)[0]).replace('&nbsp;', ',')
-                    update = find_update.findall(str_detail_html)[0]
-                    actors = remove_tags(find_actors.findall(str_detail_html)[0]).replace('&nbsp;', ',')
-                    director = remove_tags(find_director.findall(str_detail_html)[0]).replace('&nbsp;', ',')
-                    # info = str(doc.xpath('/html/body/div[3]/div/div[2]/div/div[2]/p/text()')[0]).strip()
-                    info = str(doc.xpath('//div[@class="fed-tabs-boxs"]//p/text()')[0])\
-                        .replace('酷云在线播放电影网站=酷云在线播放电影网站', '').strip()
-                    data = {
-                        'title': title,
-                        'ID': movie_id,
-                        'detailUrl': base_url+link,
-                        'category': category,
-                        'area': area,
-                        'year': year,
-                        'update': update,
-                        'actors': actors,
-                        'director': director,
-                        'info': info
-                    }
-                    print(data)
-                    data_list.append(data)
-                except Exception as e:
-                    print(f"爬取第{i}页的{title}数据失败！")
-                    print(e)
-                    continue
+                # 影片详情的链接
+                link = find_link.findall(item)[0]
+                detail_url = base_url + link
+                # 从详情页获取数据
+                detail_html = ask_url(detail_url)
+                doc = etree.HTML(detail_html)
+                # detailSoup = BeautifulSoup(detailHtml,"html.parser")
+                str_detail_html = str(detail_html)
+                title = find_title.findall(str_detail_html)[0]
+                movie_id = find_id.findall(str_detail_html)[0]
+                category = find_category.findall(str_detail_html)[0]
+                area = remove_tags(find_area.findall(str_detail_html)[0]).replace('&nbsp;', ',')
+                year = find_year.findall(str_detail_html)[0]
+                update = find_update.findall(str_detail_html)[0]
+                actors = remove_tags(find_actors.findall(str_detail_html)[0]).replace('&nbsp;', ',')
+                director = remove_tags(find_director.findall(str_detail_html)[0]).replace('&nbsp;', ',')
+                info = str(doc.xpath('/html/body/div[3]/div/div[2]/div/div[2]/p/text()')[0])
+                info = info.strip()
+                print(info)
+                data = {
+                    'title': title,
+                    'ID': movie_id,
+                    'detailUrl': base_url+link,
+                    'category': category,
+                    'area': area,
+                    'year': year,
+                    'update': update,
+                    'actors': actors,
+                    'director': director,
+                    'info': info
+                }
+                # print(data)
+                data_list.append(data)
             # print(f'第{i}页{dataList}')
         else:
             print(f"爬取第{i}页数据失败！")
             continue
         time.sleep(3)
-
     return data_list
 
 
