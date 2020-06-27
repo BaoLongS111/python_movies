@@ -11,6 +11,11 @@ from bs4 import BeautifulSoup
 from w3lib.html import remove_tags
 from lxml import etree
 
+# 线路② 2  https://youku.com-youku.com/share/kt46gVOU5qznTlQU
+# https://jx.cbi88.com/?url=https://zj.cbi88.com/20200510/wK9VwSdM/index.m3u8
+# //www.dplayer.tv/?url=https://youku.com-youku.com/20180122/OgFJZjkT/index.m3u8
+# //www.dplayer.tv/?url=https://youku.com-youku.com/20180122/DQtDPzYV/index.m3u8
+
 
 def main():
     base_url = "https://kuyun.tv"
@@ -35,7 +40,8 @@ find_category = re.compile(r'<a href="/vod/type/id/\d*.html" target="_blank">(.*
 find_area = re.compile('<li class="fed-col-xs6 fed-col-md3 fed-part-eone"><span class="fed-text-muted">'
                        '地区：</span>(.*?)</li>')
 # 年份
-find_year = re.compile(r'<li class="fed-col-xs6 fed-col-md3 fed-part-eone"><span class="fed-text-muted">年份：</span>未知</li>')
+find_year = re.compile(r'<li class="fed-col-xs6 fed-col-md3 fed-part-eone">'
+                       r'<span class="fed-text-muted">年份：</span>(.*?)</li>')
 # 更新日期
 find_update = re.compile('<li class="fed-col-xs6 fed-col-md3 fed-part-eone"><span class="fed-text-muted">'
                          '更新：</span>(.*?)</li>')
@@ -47,6 +53,8 @@ find_director = re.compile('<li class="fed-col-xs12 fed-col-md6 fed-part-eone"><
                            '导演：</span>(.*?)</li>')
 # 简介
 find_info = re.compile('<div class="fed-tabs-item fed-hidden">(.*?)</div>')
+# 视频来源
+# find_video = re.compile('<iframe id="fed-play-iframe" .* src="(.*?)"></iframe>')
 
 
 # 获取数据
@@ -68,20 +76,37 @@ def get_data(base_url):
                 detail_url = base_url + link
                 # 从详情页获取数据
                 detail_html = ask_url(detail_url)
+                # xpath解析
                 doc = etree.HTML(detail_html)
-                # detailSoup = BeautifulSoup(detailHtml,"html.parser")
+                detail_soup = BeautifulSoup(detail_html, "html.parser")
                 str_detail_html = str(detail_html)
                 title = find_title.findall(str_detail_html)[0]
                 movie_id = find_id.findall(str_detail_html)[0]
                 category = find_category.findall(str_detail_html)[0]
                 area = remove_tags(find_area.findall(str_detail_html)[0]).replace('&nbsp;', ',')
-                year = find_year.findall(str_detail_html)[0]
+                year = remove_tags(find_year.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                 update = find_update.findall(str_detail_html)[0]
                 actors = remove_tags(find_actors.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                 director = remove_tags(find_director.findall(str_detail_html)[0]).replace('&nbsp;', ',')
-                info = str(doc.xpath('/html/body/div[3]/div/div[2]/div/div[2]/p/text()')[0])
-                info = info.strip()
-                print(info)
+                info = str(doc.xpath('//div[@class="fed-tabs-boxs"]//p/text()')[0])\
+                    .replace('酷云在线播放电影网站酷云在线播放电影网站', '').replace('酷云在线播放电影网站=酷云在线播放电影网站', '').strip()
+                # 线路② 酷云备用等标题和链接
+                fin_list = []
+                fin_dict = {}
+                i = 0
+                a_url = doc.xpath('/html/body/div[3]/div/div[2]/div/div[1]/div[1]/ul/li/a/@href')
+                print(a_url)
+                a_text = doc.xpath('/html/body/div[3]/div/div[2]/div/div[1]/div[1]/ul/li/a/text()')
+                print(a_text)
+                print('正在爬取链接中')
+                for url_fin in a_url:
+                    fin_dict[a_text[i]] = get_movie_url(base_url+url_fin)
+                    fin_list.append(fin_dict)
+                    i = i+1
+                # tuple_url = zip(a_url, a_text)
+                # dict_url = [{i[1]:i[0]} for i in tuple_url]
+                # print(title)
+                # print(list(dict_url))
                 data = {
                     'title': title,
                     'ID': movie_id,
@@ -92,16 +117,42 @@ def get_data(base_url):
                     'update': update,
                     'actors': actors,
                     'director': director,
-                    'info': info
+                    'info': info,
+                    'video': fin_list
                 }
-                # print(data)
+                print(data)
                 data_list.append(data)
             # print(f'第{i}页{dataList}')
         else:
             print(f"爬取第{i}页数据失败！")
             continue
         time.sleep(3)
+
     return data_list
+
+
+# 线路②: [1-108url]
+def get_movie_url(url):
+    data_dict = {}
+    i = 0
+    html = ask_url(url)
+    doc = etree.HTML(html)
+    # 所有级数的a标签和文本
+    all_url = doc.xpath('//div[@class="fed-play-item fed-drop-item fed-visible"]//ul[@class="fed-part-rows"]/li/a/@href')
+    all_title = doc.xpath('//div[@class="fed-play-item fed-drop-item fed-visible"]'
+                          '//ul[@class="fed-part-rows"]/li/a/text()')
+    print(all_url)
+    print(all_title)
+    # print('正在爬取视频链接中')
+    for url in all_url:
+        movie_html = ask_url('https://kuyun.tv'+url)
+        movie_doc = etree.HTML(movie_html)
+        movie_url = movie_doc.xpath('//iframe[@id="fed-play-iframe"]/@src')[0]
+        # movie_url = find_video.findall(movie_html)[0]
+        # print(movie_url)
+        data_dict[all_title[i]] = movie_url
+        i = i+1
+    return data_dict
 
 
 # 得到指定一个URL的网页内容
@@ -141,3 +192,5 @@ def save_data(data_list, save_path):
 
 if __name__ == "__main__":
     main()
+    # get_movie_url('https://kuyun.tv/vod/play/id/6636/sid/1/nid/1.html')
+
