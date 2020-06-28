@@ -1,7 +1,7 @@
 import re
 from urllib import request
 
-url = 'https://kuyun.tv/vod/play/id/60334/sid/2/nid/1.html'
+url = 'https://kuyun.tv/vod/play/id/61684/sid/2/nid/1.html'
 
 res = request.urlopen(url,timeout=10)
 response = res.read().decode('utf-8')
