@@ -4,27 +4,23 @@
 # @File : demo.py
 # @Software : PyCharm
 
-import requests
 import re
 import time
+import requests
+
+from selenium import webdriver
 from bs4 import BeautifulSoup
 from w3lib.html import remove_tags
 from lxml import etree
 
-# 线路② 2  https://youku.com-youku.com/share/kt46gVOU5qznTlQU
-# https://jx.cbi88.com/?url=https://zj.cbi88.com/20200510/wK9VwSdM/index.m3u8
-# //www.dplayer.tv/?url=https://youku.com-youku.com/20180122/OgFJZjkT/index.m3u8
-# //www.dplayer.tv/?url=https://youku.com-youku.com/20180122/DQtDPzYV/index.m3u8
+from movie_db import MySQLCommand
 
 
 def main():
     base_url = "https://kuyun.tv"
     params = "/vod/show/id/1/page/{}.html"
-    # 1.爬取网页
-    data_list = get_data(base_url)
-    save_path = ".\\酷云电影.xls"
-    # 3.保存数据
-    save_data(data_list, save_path)
+    # 爬取网页(循环存储数据库)
+    get_data(base_url)
 
 
 # 创建正则表达式对象，表示规则（字符串的模式）
@@ -53,25 +49,28 @@ find_director = re.compile('<li class="fed-col-xs12 fed-col-md6 fed-part-eone"><
                            '导演：</span>(.*?)</li>')
 # 简介
 find_info = re.compile('<div class="fed-tabs-item fed-hidden">(.*?)</div>')
-# 视频来源
-find_video = re.compile('')
+# 状态
+find_status = re.compile('<span class="fed-list-remarks fed-font-xii fed-text-white fed-text-center">(.*?)</span>')
+# 评分
+find_rote = re.compile('<span class="fed-list-score fed-font-xii fed-back-green">(.*?)</span>')
+# 图片url
+find_img = re.compile('<a class="fed-list-pics fed-lazy fed-part-2by3" .* data-original="(.*?)"')
 
 
 # 获取数据
 def get_data(base_url):
-    data_list = []
     for i in range(1, 4):
         url = base_url + f"/vod/show/id/1/page/{i}.html"
         print(f"正在爬取第{i}页的数据")
-        html = ask_url(url)      # 保存获取到的网页源码
+        # 保存获取到的网页源码
+        html = ask_url(url)
         if html:
             # 2.逐一解析数据
             soup = BeautifulSoup(html, "html.parser")
             # 查找符合要求的字符串，形成列表.
-            title = ''
             for item in soup.find_all("li", class_="fed-list-item fed-padding fed-col-xs4 fed-col-sm3 fed-col-md2"):
-                item = str(item)
                 try:
+                    item = str(item)
                     # 影片详情的链接
                     link = find_link.findall(item)[0]
                     detail_url = base_url + link
@@ -79,7 +78,6 @@ def get_data(base_url):
                     detail_html = ask_url(detail_url)
                     # xpath解析
                     doc = etree.HTML(detail_html)
-                    detail_soup = BeautifulSoup(detail_html, "html.parser")
                     str_detail_html = str(detail_html)
                     title = find_title.findall(str_detail_html)[0]
                     movie_id = find_id.findall(str_detail_html)[0]
@@ -89,66 +87,80 @@ def get_data(base_url):
                     update = find_update.findall(str_detail_html)[0]
                     actors = remove_tags(find_actors.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                     director = remove_tags(find_director.findall(str_detail_html)[0]).replace('&nbsp;', ',')
+                    status = find_status.findall(str_detail_html)[0]
+                    rate = find_rote.findall(str_detail_html)[0]
+                    img = find_img.findall(str_detail_html)[0]
                     info = str(doc.xpath('//div[@class="fed-tabs-boxs"]//p/text()')[0])\
-                        .replace('酷云在线播放电影网站酷云在线播放电影网站', '').strip()
+                        .replace('酷云在线播放电影网站酷云在线播放电影网站', '').replace('酷云在线播放电影网站=酷云在线播放电影网站', '').strip()
                     # 线路② 酷云备用等标题和链接
-                    fin_list = []
                     fin_dict = {}
                     i = 0
                     a_url = doc.xpath('/html/body/div[3]/div/div[2]/div/div[1]/div[1]/ul/li/a/@href')
                     a_text = doc.xpath('/html/body/div[3]/div/div[2]/div/div[1]/div[1]/ul/li/a/text()')
+                    print('正在爬取链接中\t'+title)
                     for url_fin in a_url:
-                        fin_dict[a_text[i]] = get_movie_url(url_fin)
-                        fin_list.append(fin_dict)
+                        fin_dict[a_text[i]] = get_movie_url(base_url+url_fin)
                         i = i+1
                     # tuple_url = zip(a_url, a_text)
                     # dict_url = [{i[1]:i[0]} for i in tuple_url]
-                    print(title)
                     # print(list(dict_url))
                     data = {
-                        'title': title,
-                        'ID': movie_id,
-                        'detailUrl': base_url+link,
-                        'category': category,
-                        'area': area,
-                        'year': year,
-                        'update': update,
-                        'actors': actors,
-                        'director': director,
-                        'info': info,
-                        'video': fin_list
+                        "id": movie_id,
+                        "title": title,
+                        "info": info,
+                        "actors": actors,
+                        "director": director,
+                        "category": category,
+                        "area": area,
+                        "year": year,
+                        "update": update,
+                        "rate": rate,
+                        "status": status,
+                        "image": base_url+img,
+                        "play_url": fin_dict,
+                        "detail": base_url + link
                     }
-                    # print(data)
-                    data_list.append(data)
+                    print(data)
+                    try:
+                        # 插入数据，如果已经存在就不在重复插入
+                        mysql_command.insert_data(data)
+                    except Exception as e:
+                        print("插入数据失败", str(e))  # 输出插入失败的报错语句
+                    # 将dict转换为json数据，中文不用ascii码表示.
+                    # print(json.dumps(data, ensure_ascii=False))
+                    # data_list.append(data)
                 except Exception as e:
                     print(f"爬取第{i}页的{title}数据失败！")
-                    print(e)
+                    with open('./movieLog.txt', 'w+', encoding="utf-8") as fp:
+                        fp.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\t' + str(i)+'\t'+title)
                     continue
-            # print(f'第{i}页{dataList}')
         else:
-            print(f"爬取第{i}页数据失败！")
+            print(f"请求第{i}页失败！")
+            with open('./requestLog.txt', 'w+', encoding="utf-8") as fp:
+                fp.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+'\t'+str(i))
             continue
         time.sleep(3)
 
-    return data_list
 
-
-# 线路②: [1-108url]
 def get_movie_url(url):
     data_dict = {}
     i = 0
     html = ask_url(url)
     doc = etree.HTML(html)
-    all_url = doc.xpath("/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[1]/ul[2]/li/a/@href")
-    all_title = doc.xpath("/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[1]/ul[2]/li/a/text()")
-    print(all_url)
-    print('正在爬取视频链接中')
+    # 所有级数的a标签和文本
+    all_url = doc.xpath('//div[@class="fed-play-item fed-drop-item fed-visible"]//ul[@class="fed-part-rows"]/li/a/@href')
+    all_title = doc.xpath('//div[@class="fed-play-item fed-drop-item fed-visible"]'
+                          '//ul[@class="fed-part-rows"]/li/a/text()')
+    # print('正在爬取视频链接中')
     for url in all_url:
-        movie_html = ask_url('https://kuyun.tv'+url)
-        movie_doc = etree.HTML(movie_html)
-        # print(movie_html)
-        movie_url = movie_doc.xpath('//iframe[@id="fed-play-iframe"]/@data-play')[0]
-        data_dict[f"{all_title[i]}"] = movie_url
+        # 用selenium获取iframe里的src
+        option = webdriver.ChromeOptions()
+        option.add_argument('headless')
+        browser = webdriver.Chrome('./chromedriver.exe', options=option)
+        browser.get('https://kuyun.tv'+url)
+        movie_url = browser.find_element_by_id('fed-play-iframe').get_attribute('src')
+        browser.close()
+        data_dict[all_title[i]] = movie_url
         i = i+1
     return data_dict
 
@@ -167,7 +179,6 @@ def ask_url(url):
                   "%3A//kuyun.tv/vod/play/id/60772/sid/1/nid/1.html%22%2C%22num%22%3A%22BD720P%22%7D%5D%7D; "
                   "Hm_lpvt_90d65cb348742bcf35c5f677789a4216=1592479987"
     }
-    html = ""
     try:
         res = requests.get(url, headers=headers)
         if res.status_code == 200:
@@ -183,12 +194,11 @@ def ask_url(url):
         return False
 
 
-# 保存数据
-def save_data(data_list, save_path):
-    print("save...")
-
-
 if __name__ == "__main__":
+    # 连接数据库
+    mysql_command = MySQLCommand()
+    mysql_command.connect_mysql()
     main()
-    # get_movie_url('https://kuyun.tv/vod/play/id/6636/sid/1/nid/1.html')
+    # 关闭数据库
+    mysql_command.close_mysql()
 
