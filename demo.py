@@ -207,4 +207,4 @@ if __name__ == "__main__":
     # pool.shutdown()
     # 关闭数据库
     mysql_command.close_mysql()
-
+    print("爬取完毕！")
