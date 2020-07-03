@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import pymysql
+import json
+import time
 
 
 # 用来操作数据库的类
@@ -29,16 +31,21 @@ class MySQLCommand(object):
     # 插入数据，插入之前先查询是否存在，如果存在就不再插入
     def insert_data(self, my_dict):
         # 注意，这里查询的sql语句url=' %s '中%s的前后要有空格
-        sql_exit = "SELECT image FROM movie_detail  WHERE id = ' %d '" % (my_dict['id'])
+        sql_exit = f'SELECT image FROM movie_detail  WHERE id = "{my_dict["id"]}"'
         res = self.cursor.execute(sql_exit)
         if res:  # res为查询到的数据条数如果大于0就代表数据已经存在
-            print("数据已存在", res)
+            print(f'{my_dict["title"]}数据已存在', res)
             return 0
         # 数据不存在才执行下面的插入操作
         try:
+            print('插入新数据')
             cols = ', '.join(my_dict.keys())  # 用，分割
-            values = '"," '.join(my_dict.values())
-            sql = "INSERT INTO movie_detail (%s) VALUES (%s)" % (cols, '"' + values + '"')
+            # values = '"," '.join(my_dict.values())
+            sql = f'INSERT INTO movie_detail VALUES ({my_dict["id"]},' \
+                  f'"{my_dict["title"]}","{my_dict["info"]}","{my_dict["actors"]}","{my_dict["director"]}","{my_dict["category"]}",' \
+                  f'"{my_dict["area"]}","{my_dict["year"]}","{my_dict["update"]}",{my_dict["rate"]},"{my_dict["status"]}","{my_dict["image"]}",' \
+                  f'"{my_dict["play_url"]}","{my_dict["detail"]}")'
+            print(sql)
             # 拼装后的sql如下
             # INSERT INTO home_list (img_path, url, id, title) VALUES
             # ("https://img.huxiucdn.com.jpg"," https://www.huxiu.com90.html"," 12"," ")
@@ -58,6 +65,8 @@ class MySQLCommand(object):
                     print("数据已存在，未插入数据")
                 else:
                     print("插入数据失败，原因 %d: %s" % (e.args[0], e.args[1]))
+                    with open('./movieInsertEor.txt', 'a+', encoding="utf-8") as fp:
+                        fp.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\t' + my_dict["title"] + '\t'+str(e.args[1]) + '\n')
         except pymysql.Error as e:
             print("数据库错误，原因%d: %s" % (e.args[0], e.args[1]))
 

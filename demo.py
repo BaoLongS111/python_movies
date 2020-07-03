@@ -6,12 +6,13 @@
 
 import re
 import time
-import requests
 
+import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from w3lib.html import remove_tags
 from lxml import etree
+# from concurrent.futures import ThreadPoolExecutor
 
 from movie_db import MySQLCommand
 
@@ -52,14 +53,14 @@ find_info = re.compile('<div class="fed-tabs-item fed-hidden">(.*?)</div>')
 # 状态
 find_status = re.compile('<span class="fed-list-remarks fed-font-xii fed-text-white fed-text-center">(.*?)</span>')
 # 评分
-find_rote = re.compile('<span class="fed-list-score fed-font-xii fed-back-green">(.*?)</span>')
+find_rate = re.compile('<span class="fed-list-score fed-font-xii fed-back-green">(.*?)</span>')
 # 图片url
 find_img = re.compile('<a class="fed-list-pics fed-lazy fed-part-2by3" .* data-original="(.*?)"')
 
 
 # 获取数据
 def get_data(base_url):
-    for i in range(1, 4):
+    for i in range(1, 725):
         url = base_url + f"/vod/show/id/1/page/{i}.html"
         print(f"正在爬取第{i}页的数据")
         # 保存获取到的网页源码
@@ -80,7 +81,7 @@ def get_data(base_url):
                     doc = etree.HTML(detail_html)
                     str_detail_html = str(detail_html)
                     title = find_title.findall(str_detail_html)[0]
-                    movie_id = find_id.findall(str_detail_html)[0]
+                    movie_id = int(find_id.findall(str_detail_html)[0])
                     category = find_category.findall(str_detail_html)[0]
                     area = remove_tags(find_area.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                     year = remove_tags(find_year.findall(str_detail_html)[0]).replace('&nbsp;', ',')
@@ -88,56 +89,57 @@ def get_data(base_url):
                     actors = remove_tags(find_actors.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                     director = remove_tags(find_director.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                     status = find_status.findall(str_detail_html)[0]
-                    rate = find_rote.findall(str_detail_html)[0]
+                    rate = float(find_rate.findall(str_detail_html)[0])
                     img = find_img.findall(str_detail_html)[0]
                     info = str(doc.xpath('//div[@class="fed-tabs-boxs"]//p/text()')[0])\
                         .replace('酷云在线播放电影网站酷云在线播放电影网站', '').replace('酷云在线播放电影网站=酷云在线播放电影网站', '').strip()
                     # 线路② 酷云备用等标题和链接
                     fin_dict = {}
-                    i = 0
+                    j = 0
                     a_url = doc.xpath('/html/body/div[3]/div/div[2]/div/div[1]/div[1]/ul/li/a/@href')
                     a_text = doc.xpath('/html/body/div[3]/div/div[2]/div/div[1]/div[1]/ul/li/a/text()')
                     print('正在爬取链接中\t'+title)
                     for url_fin in a_url:
-                        fin_dict[a_text[i]] = get_movie_url(base_url+url_fin)
-                        i = i+1
+                        fin_dict[a_text[j]] = get_movie_url(base_url+url_fin)
+                        j = j+1
                     # tuple_url = zip(a_url, a_text)
                     # dict_url = [{i[1]:i[0]} for i in tuple_url]
                     # print(list(dict_url))
                     data = {
-                        "id": movie_id,
-                        "title": title,
-                        "info": info,
-                        "actors": actors,
-                        "director": director,
-                        "category": category,
-                        "area": area,
-                        "year": year,
-                        "update": update,
-                        "rate": rate,
-                        "status": status,
-                        "image": base_url+img,
-                        "play_url": fin_dict,
-                        "detail": base_url + link
+                        'id': movie_id,
+                        'title': title,
+                        'info': info,
+                        'actors': actors,
+                        'director': director,
+                        'category': category,
+                        'area': area,
+                        'year': year,
+                        'update': update,
+                        'rate': rate,
+                        'status': status,
+                        'image': base_url+img,
+                        'play_url': fin_dict,
+                        'detail': base_url + link
                     }
-                    print(data)
                     try:
                         # 插入数据，如果已经存在就不在重复插入
                         mysql_command.insert_data(data)
                     except Exception as e:
                         print("插入数据失败", str(e))  # 输出插入失败的报错语句
+                        with open('./movieInsertEor.txt', 'a+', encoding="utf-8") as fp:
+                            fp.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\t' + str(i) + '\t' + title+'\t'+str(e)+'\n')
                     # 将dict转换为json数据，中文不用ascii码表示.
                     # print(json.dumps(data, ensure_ascii=False))
                     # data_list.append(data)
                 except Exception as e:
                     print(f"爬取第{i}页的{title}数据失败！")
-                    with open('./movieLog.txt', 'w+', encoding="utf-8") as fp:
-                        fp.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\t' + str(i)+'\t'+title)
+                    with open('./movieLog.txt', 'a+', encoding="utf-8") as fp:
+                        fp.writelines(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\t' + str(i)+'\t'+title+'\t'+str(e)+'\n')
                     continue
         else:
             print(f"请求第{i}页失败！")
-            with open('./requestLog.txt', 'w+', encoding="utf-8") as fp:
-                fp.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+'\t'+str(i))
+            with open('./requestLog.txt', 'a+', encoding="utf-8") as fp:
+                fp.writelines(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+'\t'+str(i)+'\n')
             continue
         time.sleep(3)
 
@@ -198,7 +200,11 @@ if __name__ == "__main__":
     # 连接数据库
     mysql_command = MySQLCommand()
     mysql_command.connect_mysql()
+    # 创建线程池
+    # pool = ThreadPoolExecutor(max_workers=3)
     main()
+    # 关闭线程池
+    # pool.shutdown()
     # 关闭数据库
     mysql_command.close_mysql()
 

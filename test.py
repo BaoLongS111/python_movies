@@ -7,11 +7,14 @@
 import re
 import time
 import requests
+import json
 
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from w3lib.html import remove_tags
 from lxml import etree
+
+from movie_db import MySQLCommand
 
 
 def main():
@@ -77,7 +80,7 @@ def get_data(base_url):
                 doc = etree.HTML(detail_html)
                 str_detail_html = str(detail_html)
                 title = find_title.findall(str_detail_html)[0]
-                movie_id = int(find_id.findall(str_detail_html)[0])
+                movie_id = find_id.findall(str_detail_html)[0]
                 category = find_category.findall(str_detail_html)[0]
                 area = remove_tags(find_area.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                 year = remove_tags(find_year.findall(str_detail_html)[0]).replace('&nbsp;', ',')
@@ -85,20 +88,19 @@ def get_data(base_url):
                 actors = remove_tags(find_actors.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                 director = remove_tags(find_director.findall(str_detail_html)[0]).replace('&nbsp;', ',')
                 status = find_status.findall(str_detail_html)[0]
-                rate = float(find_rote.findall(str_detail_html)[0])
+                rate = find_rote.findall(str_detail_html)[0]
                 img = find_img.findall(str_detail_html)[0]
                 info = str(doc.xpath('//div[@class="fed-tabs-boxs"]//p/text()')[0])\
                     .replace('酷云在线播放电影网站酷云在线播放电影网站', '').replace('酷云在线播放电影网站=酷云在线播放电影网站', '').strip()
                 # 线路② 酷云备用等标题和链接
                 fin_dict = {}
-                i = 0
+                j = 0
                 a_url = doc.xpath('/html/body/div[3]/div/div[2]/div/div[1]/div[1]/ul/li/a/@href')
                 a_text = doc.xpath('/html/body/div[3]/div/div[2]/div/div[1]/div[1]/ul/li/a/text()')
-                print('正在爬取链接中')
-                print(title)
+                print('正在爬取链接中\t'+title)
                 for url_fin in a_url:
-                    fin_dict[a_text[i]] = get_movie_url(base_url+url_fin)
-                    i = i+1
+                    fin_dict[a_text[j]] = get_movie_url(base_url+url_fin)
+                    j = j+1
                 # tuple_url = zip(a_url, a_text)
                 # dict_url = [{i[1]:i[0]} for i in tuple_url]
                 # print(list(dict_url))
@@ -119,8 +121,15 @@ def get_data(base_url):
                     "detail": base_url + link
                 }
                 print(data)
+                # 插入数据，如果已经存在就不在重复插入
+                mysql_command.insert_data(json.dumps(data))
+                # 将dict转换为json数据，中文不用ascii码表示.
+                # print(json.dumps(data, ensure_ascii=False))
+                # data_list.append(data)
         else:
             print(f"请求第{i}页失败！")
+            with open('./requestLog.txt', 'a+', encoding="utf-8") as fp:
+                fp.writelines(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+'\t'+str(i))
             continue
         time.sleep(3)
 
@@ -179,5 +188,9 @@ def ask_url(url):
 
 if __name__ == "__main__":
     # 连接数据库
+    mysql_command = MySQLCommand()
+    mysql_command.connect_mysql()
     main()
     # 关闭数据库
+    mysql_command.close_mysql()
+
