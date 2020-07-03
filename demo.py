@@ -158,7 +158,9 @@ def get_movie_url(url):
         # 用selenium获取iframe里的src
         option = webdriver.ChromeOptions()
         option.add_argument('headless')
-        browser = webdriver.Chrome('./chromedriver.exe', options=option)
+        option.add_argument('--no-sandbox')
+        option.add_argument('--disable-dev-shm-usage')
+        browser = webdriver.Chrome('/usr/bin/chromedriver', options=option)
         browser.get('https://kuyun.tv'+url)
         movie_url = browser.find_element_by_id('fed-play-iframe').get_attribute('src')
         browser.close()
