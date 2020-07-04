@@ -141,7 +141,7 @@ def get_data(base_url):
             with open('./requestLog.txt', 'a+', encoding="utf-8") as fp:
                 fp.writelines(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+'\t'+str(i)+'\n')
             continue
-        time.sleep(3)
+        time.sleep(2)
 
 
 def get_movie_url(url):
