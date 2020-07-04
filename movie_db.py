@@ -40,7 +40,7 @@ class MySQLCommand(object):
         try:
             cols = ', '.join(my_dict.keys())  # 用，分割
             # values = '"," '.join(my_dict.values())
-            sql = f"INSERT INTO movie_detail VALUES ({my_dict["id"]},'{my_dict["title"]}','{my_dict["info"]}','{my_dict["actors"]}','{my_dict["director"]}','{my_dict["category"]}','{my_dict["area"]}','{my_dict["year"]}','{my_dict["update"]}',{my_dict["rate"]},'{my_dict["status"]}','{my_dict["image"]}','{my_dict["play_url"]}','{my_dict["detail"]}')"
+            sql = rf'INSERT INTO movie_detail VALUES ({my_dict["id"]},"{my_dict["title"]}","{my_dict["info"]}","{my_dict["actors"]}","{my_dict["director"]}","{my_dict["category"]}","{my_dict["area"]}","{my_dict["year"]}","{my_dict["update"]}",{my_dict["rate"]},"{my_dict["status"]}","{my_dict["image"]}","{my_dict["play_url"]}","{my_dict["detail"]}")'
             print(sql)
             # 拼装后的sql如下
             # INSERT INTO home_list (img_path, url, id, title) VALUES
