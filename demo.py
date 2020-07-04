@@ -80,7 +80,7 @@ def get_data(base_url):
                     # xpath解析
                     doc = etree.HTML(detail_html)
                     str_detail_html = str(detail_html)
-                    title = find_title.findall(str_detail_html)[0]
+                    title = str(find_title.findall(str_detail_html)[0]).replace('"','\"').replace("'","\'")
                     movie_id = int(find_id.findall(str_detail_html)[0])
                     category = find_category.findall(str_detail_html)[0]
                     area = remove_tags(find_area.findall(str_detail_html)[0]).replace('&nbsp;', ',')
@@ -92,7 +92,7 @@ def get_data(base_url):
                     rate = float(find_rate.findall(str_detail_html)[0])
                     img = find_img.findall(str_detail_html)[0]
                     info = str(doc.xpath('//div[@class="fed-tabs-boxs"]//p/text()')[0])\
-                        .replace('酷云在线播放电影网站酷云在线播放电影网站', '').replace('酷云在线播放电影网站=酷云在线播放电影网站', '').strip()
+                        .replace('酷云在线播放电影网站酷云在线播放电影网站', '').replace('酷云在线播放电影网站=酷云在线播放电影网站', '').replace("'","\'").replace('"','\"').strip()
                     # 线路② 酷云备用等标题和链接
                     fin_dict = {}
                     j = 0
