@@ -1,0 +1,237 @@
+2020-07-04 15:03:13	6	林海雪原	can only parse strings
+2020-07-04 15:05:07	6	AKB48现场演唱会2019	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-04 15:06:08	6	AKB48现场演唱会2019	can only parse strings
+2020-07-04 15:11:28	7	中国司法	can only parse strings
+2020-07-04 15:45:54	8	射雕英雄传之东成西就	can only parse strings
+2020-07-04 15:59:19	9	困兽之斗	can only parse strings
+2020-07-04 16:35:09	11	阿莉芙	can only parse strings
+2020-07-04 17:25:16	14	恶魔之夜2020	can only parse strings
+2020-07-04 17:38:48	15	甜蜜的来世	HTTPConnectionPool(host='localhost', port=60098): Max retries exceeded with url: /session (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f6986f8a9d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2020-07-04 17:47:19	16	说电影《斗战苍穹》	can only parse strings
+2020-07-04 18:40:24	19	阴谋 亲爱的艾格尼丝	can only parse strings
+2020-07-04 18:53:09	20	神将再临	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-04 20:30:17	27	开往春天的地铁	can only parse strings
+2020-07-04 20:46:51	28	变鬼3.1	can only parse strings
+2020-07-04 20:50:14	28	世界由3构成	can only parse strings
+2020-07-04 21:03:20	28	长袜子皮皮的新历险	can only parse strings
+2020-07-04 21:25:39	30	灿烂这一刻	can only parse strings
+2020-07-04 21:28:56	30	聊斋残卷之六道天书	can only parse strings
+2020-07-04 21:53:21	30	说电影《罗小黑战记》	Message: timeout: Timed out receiving message from renderer: 295.316
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-04 21:58:43	30	说电影《猫女》	can only parse strings
+2020-07-04 22:03:08	32	说电影《迷离时空》	can only parse strings
+2020-07-04 22:26:17	33	惊世狂花	Message: timeout: Timed out receiving message from renderer: 298.253
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-04 22:34:48	33	说电影《血色旅途之小白鼠》	can only parse strings
+2020-07-04 22:36:09	33	说电影《血色旅途之糟糕作家》	can only parse strings
+2020-07-04 22:39:54	33	说电影《血色旅途之糟糕作家》	can only parse strings
+2020-07-04 22:46:36	33	说电影《世界奇妙物语之氛差值教育》	can only parse strings
+2020-07-04 23:36:11	35	亚洲警察之高压线	can only parse strings
+2020-07-05 00:56:12	40	门徒	can only parse strings
+2020-07-05 02:26:20	47	听说桐岛要退部	can only parse strings
+2020-07-05 04:04:26	54	说电影《夺命感应》	can only parse strings
+2020-07-05 04:05:47	54	说电影《步履不停》	can only parse strings
+2020-07-05 04:29:04	56	游击队员	can only parse strings
+2020-07-05 04:50:55	58	开工大急	can only parse strings
+2020-07-05 05:07:26	59	何二狗的名单	can only parse strings
+2020-07-05 05:27:15	61	寻找黔味 第二季	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-05 06:01:09	64	侵占	can only parse strings
+2020-07-05 07:10:56	69	狐狸大冒险	can only parse strings
+2020-07-05 07:16:53	69	芭萨提的颜色	can only parse strings
+2020-07-05 07:43:29	72	奥斯卡	can only parse strings
+2020-07-05 07:54:22	74	朝鲜：生活中的一天	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-05 08:17:33	76	摇啊摇，摇到外婆桥	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-05 08:50:50	79	麻雀变王妃3	can only parse strings
+2020-07-05 09:02:21	80	一样的月光	can only parse strings
+2020-07-05 11:13:45	91	催命符之劫后重生	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-05 11:19:46	91	街头重生	can only parse strings
+2020-07-05 11:43:41	92	比尔和泰德历险记	can only parse strings
+2020-07-05 12:00:00	93	黑帮大佬和我的365天	can only parse strings
+2020-07-05 16:11:58	96	下水道1957	name 'i' is not defined
+2020-07-05 16:12:09	96	五龙镇棺传	name 'i' is not defined
+2020-07-05 16:12:21	96	张三丰2太极天师	name 'i' is not defined
+2020-07-05 16:12:35	96	思维游戏2015	name 'i' is not defined
+2020-07-05 17:34:12	101	六扇门之绝战	can only parse strings
+2020-07-05 18:08:36	103	屋顶探险家	can only parse strings
+2020-07-05 18:09:31	103	屋顶探险家	can only parse strings
+2020-07-05 18:11:51	104	侠丐传奇	can only parse strings
+2020-07-05 19:06:48	107	要有光 创造101幕后揭秘纪录片	can only parse strings
+2020-07-05 19:23:37	108	大匠春秋之秘典迷踪	can only parse strings
+2020-07-05 19:58:00	110	说电影《动物园先生》	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-05 20:07:21	111	汤波热	Message: timeout: Timed out receiving message from renderer: 296.314
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-05 20:08:23	111	马尔科姆·艾克斯	can only parse strings
+2020-07-05 20:10:34	111	四角关系2005	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-05 20:29:39	111	说电影《请叫我英雄》	can only parse strings
+2020-07-05 20:31:30	111	说电影《请叫我英雄》	can only parse strings
+2020-07-05 20:34:39	111	说电影《请叫我英雄》	can only parse strings
+2020-07-05 20:47:41	112	金玉良缘红楼梦	can only parse strings
+2020-07-05 20:57:46	113	我的美女室友	can only parse strings
+2020-07-05 21:32:02	115	爪哇火线	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-06 09:14:59	116	怪客	can only parse strings
+2020-07-06 09:32:05	117	雄起2017	Message: chrome not reachable
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-06 10:13:16	119	追捕	can only parse strings
+2020-07-06 10:16:40	119	追捕	can only parse strings
+2020-07-06 11:22:34	124	终结的感觉	can only parse strings
+2020-07-06 11:28:10	124	相见恨早2005	Message: timeout: Timed out receiving message from renderer: 290.544
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-06 11:29:33	124	完美计划	Message: chrome not reachable
+
+2020-07-06 11:30:50	124	长翅膀的猪	Message: chrome not reachable
+
+2020-07-06 11:32:05	124	解谜小队	Message: chrome not reachable
+
+2020-07-06 11:33:34	124	定时器	Message: chrome not reachable
+
+2020-07-06 11:35:21	124	练爱见习生	Message: unknown error: DevToolsActivePort file doesn't exist
+
+2020-07-06 11:36:27	124	一个很默瑞的圣诞节	Message: unknown error: DevToolsActivePort file doesn't exist
+
+2020-07-06 20:28:30	127	安娜弗里茨的尸体	Message: chrome not reachable
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-06 20:50:08	127	麦克法兰	can only parse strings
+2020-07-06 21:25:44	129	妈妈再见	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-06 22:25:55	132	好小子之游侠儿	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-06 22:29:14	133	当你熟睡	can only parse strings
+2020-07-07 00:22:04	138	雨过天晴	can only parse strings
+2020-07-07 01:05:19	142	惩罚者2004	can only parse strings
+2020-07-07 01:07:16	142	三十一	can only parse strings
+2020-07-07 02:08:05	147	决战拉梅萨	can only parse strings
+2020-07-07 02:29:56	149	乔达谜布陀罗·娑多迦罗尼	can only parse strings
+2020-07-07 02:50:36	151	甜心巧克力	can only parse strings
+2020-07-07 04:22:41	159	说电影《王国第二季02》	can only parse strings
+2020-07-07 04:38:46	160	野人2010	can only parse strings
+2020-07-07 05:04:07	162	欢乐满人间	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-07 06:07:34	167	日本海大海战	can only parse strings
+2020-07-07 06:46:44	127	忍者神龟2：破影而出	Message: chrome not reachable
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-07 06:56:42	127	有一天	can only parse strings
+2020-07-07 07:39:10	130	人妖阿发 痴人三部曲	can only parse strings
+2020-07-07 08:15:10	133	好小子之游侠儿	can only parse strings
+2020-07-07 08:52:06	137	门后有鬼	can only parse strings
+2020-07-07 09:01:11	137	决战1994	can only parse strings
+2020-07-07 09:39:59	141	欢迎回家：常青之镇	can only parse strings
+2020-07-07 10:08:52	143	坍塌	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-07 10:26:15	144	龙的传人	can only parse strings
+2020-07-07 10:42:01	145	克利夏	can only parse strings
+2020-07-07 11:16:23	148	品行不端	can only parse strings
+2020-07-07 11:33:56	149	说电影《关键第四号》	Message: timeout: Timed out receiving message from renderer: 279.800
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-07 11:35:15	149	说电影《大白鲨》	Message: chrome not reachable
+
+2020-07-07 11:37:29	149	制胜一击	Message: chrome not reachable
+
+2020-07-07 11:40:28	149	一千零一夜之梦中人	Message: chrome not reachable
+
+2020-07-07 21:00:51	149	斗战苍穹	Message: chrome not reachable
+
+2020-07-07 21:02:21	149	登堂入室	Message: chrome not reachable
+
+2020-07-07 21:15:31	149	海囚	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-07 21:20:30	149	说电影《炭火仔：勇战巨魔王》	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-07 21:27:13	149	日光峡谷	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-07 21:28:45	149	日光峡谷	can only parse strings
+2020-07-07 21:33:23	152	弯刀2010	can only parse strings
+2020-07-07 21:43:22	152	潜行中国	Message: chrome not reachable
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-07 21:49:09	152	大坏狐狸的故事	can only parse strings
+2020-07-07 21:59:46	153	毒枭回忆录	can only parse strings
+2020-07-07 22:20:47	154	说电影《鬼校亡友之12广播》	can only parse strings
+2020-07-07 22:40:32	155	囚犯	can only parse strings
+2020-07-07 22:48:00	155	美国暴力	can only parse strings
+2020-07-07 23:38:52	158	一个夏夜	can only parse strings
+2020-07-07 23:45:02	158	Oh！我的幽灵鬼	can only parse strings
+2020-07-08 07:44:11	160	庙街十二少	can only parse strings
+2020-07-08 07:55:22	161	肇事逃逸，最好的最糟之日	can only parse strings
+2020-07-08 09:30:22	169	疯狂假期	can only parse strings
+2020-07-08 10:17:11	171	说电影《巴比伦纪元》	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 10:34:35	173	皆大欢喜1993	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 10:47:33	174	无码青春期	can only parse strings
+2020-07-08 10:50:30	174	说电影《幼兽》	can only parse strings
+2020-07-08 11:27:55	176	神通术与小霸王	Message: timeout: Timed out receiving message from renderer: 289.965
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 11:31:27	176	金印仇	can only parse strings
+2020-07-08 11:32:56	176	幸存者2018	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 11:34:36	176	夜去晨来	can only parse strings
+2020-07-08 11:58:51	177	大抗战	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 12:02:25	177	摩天雄鹰	can only parse strings
+2020-07-08 12:55:19	181	僵尸VS黑衣忍者	can only parse strings
+2020-07-08 13:13:55	182	说电影《故事的故事之女王》	can only parse strings
+2020-07-08 14:07:21	185	天龙号醒来之返航迷途	can only parse strings
+2020-07-08 14:33:14	187	奏鸣曲1993	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 14:38:48	187	血与骨2004	Message: timeout: Timed out receiving message from renderer: 290.655
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 14:50:35	187	说电影《入殓师》	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 15:13:39	188	书缘：纽约公共图书馆	can only parse strings
+2020-07-08 16:28:40	194	笑傲江湖1990	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 16:52:07	196	说电影《首尔站》	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 18:05:09	200	说电影《人间中毒》	Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fed-play-iframe"]"}
+  (Session info: headless chrome=83.0.4103.116)
+
+2020-07-08 19:13:59	207	街头之王2012	can only parse strings
+2020-07-08 20:40:54	213	山炮贼中贼2绝世艳贼	can only parse strings
+2020-07-08 20:44:06	213	天使陷落	can only parse strings
+2020-07-08 22:48:21	219	浪荡子	can only parse strings
+2020-07-09 00:32:15	224	失眠	can only parse strings
+2020-07-09 00:41:37	225	说电影《Hello！树先生》	can only parse strings
+2020-07-09 00:50:59	225	半身死灵	can only parse strings

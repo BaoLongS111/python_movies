@@ -9,6 +9,7 @@ import time
 
 import requests
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 from w3lib.html import remove_tags
 from lxml import etree
@@ -60,7 +61,7 @@ find_img = re.compile('<a class="fed-list-pics fed-lazy fed-part-2by3" .* data-o
 
 # 获取数据
 def get_data(base_url):
-    for i in range(1, 725):
+    for i in range(158, 729):
         url = base_url + f"/vod/show/id/1/page/{i}.html"
         print(f"正在爬取第{i}页的数据")
         # 保存获取到的网页源码
@@ -128,6 +129,7 @@ def get_data(base_url):
                         print("插入数据失败", str(e))  # 输出插入失败的报错语句
                         with open('./movieInsertEor.txt', 'a+', encoding="utf-8") as fp:
                             fp.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\t' + str(i) + '\t' + title+'\t'+str(e)+'\n')
+                        continue
                     # 将dict转换为json数据，中文不用ascii码表示.
                     # print(json.dumps(data, ensure_ascii=False))
                     # data_list.append(data)
@@ -141,7 +143,7 @@ def get_data(base_url):
             with open('./requestLog.txt', 'a+', encoding="utf-8") as fp:
                 fp.writelines(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+'\t'+str(i)+'\n')
             continue
-        time.sleep(2)
+        time.sleep(3)
 
 
 def get_movie_url(url):
@@ -153,19 +155,23 @@ def get_movie_url(url):
     all_url = doc.xpath('//div[@class="fed-play-item fed-drop-item fed-visible"]//ul[@class="fed-part-rows"]/li/a/@href')
     all_title = doc.xpath('//div[@class="fed-play-item fed-drop-item fed-visible"]'
                           '//ul[@class="fed-part-rows"]/li/a/text()')
+    # 用selenium获取iframe里的src
+    c_service = Service('/usr/bin/chromedriver')
+    c_service.command_line_args()
+    c_service.start()
+    option = webdriver.ChromeOptions()
+    option.add_argument('--headless')
+    option.add_argument('--no-sandbox')
+    option.add_argument('--disable-dev-shm-usage')
+    browser = webdriver.Chrome('/usr/bin/chromedriver', options=option)
     # print('正在爬取视频链接中')
     for url in all_url:
-        # 用selenium获取iframe里的src
-        option = webdriver.ChromeOptions()
-        option.add_argument('headless')
-        option.add_argument('--no-sandbox')
-        option.add_argument('--disable-dev-shm-usage')
-        browser = webdriver.Chrome('/usr/bin/chromedriver', options=option)
         browser.get('https://kuyun.tv'+url)
         movie_url = browser.find_element_by_id('fed-play-iframe').get_attribute('src')
-        browser.close()
         data_dict[all_title[i]] = movie_url
         i = i+1
+    browser.quit()
+    c_service.stop()
     return data_dict
 
 
